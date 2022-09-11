@@ -20,6 +20,9 @@ namespace ParksAPI.Controllers
       _db = db;
     }
 
+    /// <summary>
+    /// Query a specific api endpoint, park type, city or state where park is located, and a park feature.
+    /// </summary>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Park>>> Get(string type, string city, string state, string feature)
     {
@@ -50,8 +53,28 @@ namespace ParksAPI.Controllers
       
     }
 
-    
+/// <summary>
+/// Creates a new Park in the database/api.
+/// </summary>
+/// <remarks>
+/// Sample request:
+///
+///     POST /Park
+///     {
+///        "Parkid": 5,
+///        "ParkName": "Badlands",
+///        "Type": "National",
+///        "City": "Interior",
+///        "State": "South Dakota",
+///        "Feature": "hiking"
+///     }
+///
+/// </remarks>
+/// <response code="201">Returns the newly created park</response>
+/// <response code="400">If the item is null</response>  
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<Park>> Post(Park park)
     {
       _db.Parks.Add(park);
@@ -60,6 +83,9 @@ namespace ParksAPI.Controllers
       return CreatedAtAction("Post", new { id = park.ParkId }, park);
     }
 
+    /// <summary>
+    /// Query a specific park based on it's id
+    /// </summary>
     [HttpGet("{id}")]
     public async Task<ActionResult<Park>> GetPark(int id)
     {
@@ -73,6 +99,9 @@ namespace ParksAPI.Controllers
       return park;
     }
 
+    /// <summary>
+    /// Edit a specific park's information based on it's id
+    /// </summary>
     [HttpPut("{id}")]
     public async Task<IActionResult> Put(int id, Park park)
     {
@@ -107,6 +136,9 @@ namespace ParksAPI.Controllers
       return _db.Parks.Any(e => e.ParkId == id);
     }
 
+    /// <summary>
+    /// Delete a specific park based on it's id
+    /// </summary>
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePark(int id)
     {

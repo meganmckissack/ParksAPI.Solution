@@ -1,4 +1,6 @@
 using System;
+using System.Reflection;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,7 +35,27 @@ namespace ParksAPI
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ParksAPI", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo 
+                { 
+                  Title = "ParksAPI", 
+                  Version = "v1",
+                  Description = "An API for state and national parks",
+                  Contact = new OpenApiContact
+                  {
+                    Name = "Megan McKissack",
+                    Email = "meganmckissack@gmail.com",
+                    Url = new Uri("https://github.com/meganmckissack"),
+                  },
+                  License = new OpenApiLicense
+                  {
+                    Name = "MIT License",
+                    Url = new Uri("https://choosealicense.com/licenses/mit/"),
+                  }
+                });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
         }
 
